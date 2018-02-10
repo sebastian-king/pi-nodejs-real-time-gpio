@@ -17,6 +17,8 @@ wget -O -  https://get.acme.sh | sh # this will install it and save the credenti
 export Namecom_Username="${namecom_username}"
 export Namecom_Token="${namecom_token}"
 acme.sh --issue --dns dns_namecom -d "${domain}"
+ln -s "/root/.acme.sh/${domain}/fullchain.cer" "assets/ssl/fullchain.cer"
+ln -s "/root/.acme.sh/${domain}/${domain}.key" "assets/ssl/privkey.key"
 
 #install programs
 apt-get install apache2 php pigpio nodejs node-legacy runit

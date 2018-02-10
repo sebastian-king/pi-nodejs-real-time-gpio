@@ -4,13 +4,20 @@ var WebSocketServer = require('websocket').server;
 //var http = require('http');
 var Gpio = require('pigpio').Gpio;
 
+var https = require('https');
+var fs = require('fs');
+
+var config = fs.readFileSync('../assets/config.sh', 'utf8');
+
+var domain = config.toString().match(/domain="(.+)";/)[1];
+
 var led_strips = [];
 var clients = [];
 var connectionIDCounter = 0;
 
-led_strips.push(new Gpio(9, {mode: Gpio.OUTPUT})); //top_led_strip
-led_strips.push(new Gpio(10, {mode: Gpio.OUTPUT})); // keyboard_led_strip
-led_strips.push(new Gpio(22, {mode: Gpio.OUTPUT})); // shelves_led_strip
+led_strips.push(new Gpio(9, {mode: Gpio.OUTPUT}));  //top_led_strip
+led_strips.push(new Gpio(10, {mode: Gpio.OUTPUT})); //keyboard_led_strip
+led_strips.push(new Gpio(22, {mode: Gpio.OUTPUT})); //shelves_led_strip
 led_strips.push(new Gpio(23, {mode: Gpio.OUTPUT})); //hifi_left_led_strip
 led_strips.push(new Gpio(17, {mode: Gpio.OUTPUT})); //hifi_right_led_strip
 
@@ -20,13 +27,10 @@ for (i = 0; i < led_strips.length; i++) {
 	led_strips[i].pwmWrite(0);
 }
 
-var https = require('https');
-var fs = require('fs');
-
 var server = https.createServer(
 	{
-	      key: fs.readFileSync( '/root/.acme.sh/h.helpfulseb.com/h.helpfulseb.com.key' ),
-	      cert: fs.readFileSync( '/root/.acme.sh/h.helpfulseb.com/fullchain.cer' )
+	      key: fs.readFileSync( '/root/.acme.sh/' + domain + '/' + domain + '.key' ),
+	      cert: fs.readFileSync( '/root/.acme.sh/' + domain + '/fullchain.cer' )
 	},
 	function(request, response) {
 	    console.log((new Date()) + ' Received request for ' + request.url);
@@ -36,7 +40,7 @@ var server = https.createServer(
 );
 
 server.listen(8889, function() {
-    console.log((new Date()) + ' Server is listening on port 8889');
+    console.log((new Date()) + ' Server is listening on port 8889'); // pigpiod uses port 8888
 });
 
 wsServer = new WebSocketServer({
