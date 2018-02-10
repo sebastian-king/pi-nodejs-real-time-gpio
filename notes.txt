@@ -1,0 +1,3 @@
+all require apt-get install pigpio
+
+soft_pwm.py required service pigpiod start

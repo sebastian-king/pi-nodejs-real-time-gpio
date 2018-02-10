@@ -1,0 +1,2 @@
+#!/bin/bash
+/usr/bin/nodejs /var/www/h/npm/websocket-server.js
