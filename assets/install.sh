@@ -10,7 +10,7 @@ mkdir /var/www/h/
 cd /var/www/h/
 
 #get package files and put them into the web root (github?)
-#wget ...
+git clone https://github.com/sebastian-king/pi-nodejs-real-time-gpio
 
 #install acme script for SSL
 wget -O -  https://get.acme.sh | sh # this will install it and save the credentials below for future use
