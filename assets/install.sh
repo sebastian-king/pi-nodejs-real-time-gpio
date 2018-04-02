@@ -16,12 +16,12 @@ git clone https://github.com/sebastian-king/pi-nodejs-real-time-gpio
 wget -O -  https://get.acme.sh | sh # this will install it and save the credentials below for future use
 export Namecom_Username="${namecom_username}"
 export Namecom_Token="${namecom_token}"
-acme.sh --issue --dns dns_namecom -d "${domain}"
+/root/.acme.sh/acme.sh --issue --dns dns_namecom -d "${domain}"
 ln -s "/root/.acme.sh/${domain}/fullchain.cer" "assets/ssl/fullchain.cer"
 ln -s "/root/.acme.sh/${domain}/${domain}.key" "assets/ssl/privkey.key"
 
 #install programs
-apt-get install apache2 php pigpio nodejs node-legacy runit
+apt-get install apache2 php pigpio nodejs nodejs-legacy runit
 
 #make sure we install npm modules into the correct directory
 cd /var/www/h/npm/
