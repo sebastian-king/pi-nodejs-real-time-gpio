@@ -21,7 +21,7 @@ ln -s "/root/.acme.sh/${domain}/fullchain.cer" "assets/ssl/fullchain.cer"
 ln -s "/root/.acme.sh/${domain}/${domain}.key" "assets/ssl/privkey.key"
 
 #install programs
-apt-get install apache2 php pigpio nodejs nodejs-legacy runit
+apt-get install apache2 php pigpio nodejs nodejs-legacy npm runit
 
 #make sure we install npm modules into the correct directory
 cd /var/www/h/npm/
