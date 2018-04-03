@@ -1,16 +1,18 @@
 #!/bin/bash
 
-source "$(dirname "$0")/config.sh"
-
-echo "alias pslw='ps f -wwweopid,user,etime,args'" >> ~/.bashrc
-#echo "alias lso=\"ls -alG | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\\\" %0o \\\",k);print}'\"" >> ~/.bashrc # doesn't format correctly when printed
-
 #create and go to web root
-mkdir /var/www/h/
+mkdir -p /var/www/h/
 cd /var/www/h/
 
 #get package files and put them into the web root (github?)
-git clone https://github.com/sebastian-king/pi-nodejs-real-time-gpio
+git clone https://github.com/sebastian-king/pi-nodejs-real-time-gpio .
+
+cd assets/
+source "$(dirname "$0")/config.sh"
+#./install.sh
+
+echo "alias pslw='ps f -wwweopid,user,etime,args'" >> ~/.bashrc
+#echo "alias lso=\"ls -alG | awk '{k=0;for(i=0;i<=8;i++)k+=((substr(\$1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(\\\" %0o \\\",k);print}'\"" >> ~/.bashrc # doesn't format correctly when printed
 
 #install acme script for SSL
 wget -O -  https://get.acme.sh | sh # this will install it and save the credentials below for future use
