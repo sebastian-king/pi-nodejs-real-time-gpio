@@ -39,6 +39,9 @@ rm /tmp/cron
 crontab -l # just to check and make sure they got added
 
 #symlink
+ln -s /var/www/h/assets/runit/cool /etc/sv/
+ln -s /etc/sv/cool /etc/service/
+
 ln -s /var/www/h/assets/runit/wss /etc/sv/
 ln -s /etc/sv/wss /etc/service/
 
