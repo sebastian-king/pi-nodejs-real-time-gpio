@@ -1,1 +1,2 @@
-#exit code
+#!/bin/bash
+killall nodejs

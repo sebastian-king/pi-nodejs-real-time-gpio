@@ -1,5 +1,5 @@
 assets/config.sh
 npm/node_modules
-assets/runit/wss/log/supervise/
-assets/runit/wss/supervise/
+assets/runit/*/log/supervise/
+assets/runit/*/supervise/
 tests

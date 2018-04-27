@@ -15,13 +15,14 @@ var led_strips = [];
 var clients = [];
 var connectionIDCounter = 0;
 
-led_strips.push(new Gpio(13, {mode: Gpio.OUTPUT})); //top_led_strip
+led_strips.push(new Gpio(26, {mode: Gpio.OUTPUT})); //top_led_strip
+//led_strips.push(new Gpio(6, {mode: Gpio.OUTPUT})); //top_led_strip
 led_strips.push(new Gpio(20, {mode: Gpio.OUTPUT})); //keyboard_led_strip
 led_strips.push(new Gpio(16, {mode: Gpio.OUTPUT})); //shelves_led_strip
-led_strips.push(new Gpio(19, {mode: Gpio.OUTPUT})); //hifi_left_led_strip
-led_strips.push(new Gpio(26, {mode: Gpio.OUTPUT})); //hifi_right_led_strip
+led_strips.push(new Gpio(24, {mode: Gpio.OUTPUT})); //hifi_left_led_strip
+led_strips.push(new Gpio(25, {mode: Gpio.OUTPUT})); //hifi_right_led_strip
 
-speakers = new Gpio(21, {mode: Gpio.OUTPUT});
+speakers = new Gpio(22, {mode: Gpio.OUTPUT});
 
 for (i = 0; i < led_strips.length; i++) {
 	led_strips[i].pwmWrite(0);
