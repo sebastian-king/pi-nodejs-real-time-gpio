@@ -2,4 +2,5 @@ assets/config.sh
 npm/node_modules
 assets/runit/*/log/supervise/
 assets/runit/*/supervise/
+assets/cooling/temperature_threshold
 tests

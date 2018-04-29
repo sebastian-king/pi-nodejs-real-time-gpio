@@ -4,6 +4,7 @@
 	<meta charset="utf-8" />
 	<title>WebSocket LED Controls</title>
 	<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
+	<link rel="stylesheet" href="/css/fontawesome-all.min.css">
 	<style>
 		
 		body {
@@ -138,6 +139,35 @@
 		.onoffswitch-checkbox:checked + .onoffswitch-label .onoffswitch-switch {
 			right: 0px; 
 		}
+		
+		#cooling {
+			text-align: center;
+			font-size: 40pt;
+		}
+		#cooling button {
+			height: 85px;
+			padding: 5px;
+			vertical-align: top;
+			border-radius: 0 !important;
+			-webkit-appearance: none;
+			-webkit-border-radius: 0;
+		}
+		#cooling input, button {
+			text-align: inherit;
+			font-size: inherit;
+			width: 85px;
+			height: 85px;
+			box-sizing: border-box;
+		}
+		#cooling > * {
+			display: inline-block;
+		}
+		#cooling i {
+			padding: 0px 10px 0px 10px;
+		}
+		#cooling #temperature_threshold {
+			padding: 5px;
+		}
 	</style>
 </head>
 <body>
@@ -168,6 +198,11 @@
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_4"><!--
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_5"><!--
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_6">
+	</div>
+	
+	<div style="text-align: center; margin-bottom: 10px;">Temperature threshold (°C)</div>
+	<div id="cooling">
+		<button onClick="javascript:update_cooling_threshold(-5);"><i class="fas fa-minus-circle"></i></button><input type="text" id="temperature_threshold" value="-1" readonly="readonly"><button onClick="javascript:update_cooling_threshold(5);"><i class="fas fa-plus-circle"></i></button>
 	</div>
 		
 <h2>WebSocket Output</h2>
@@ -218,7 +253,8 @@
 					document.getElementById("range_4").value = data.val[3];
 					document.getElementById("range_5").value = data.val[4];
 					document.getElementById("range_6").value = data.val[5];
-					document.getElementById("toggle-speakers-switch").checked = data.val[5] == 1 ? true : false;
+					document.getElementById("toggle-speakers-switch").checked = data.val[6] == 1 ? true : false;
+					document.getElementById("temperature_threshold").value = data.val[7];
 				} else if (data.key == 'changed') {
 					document.getElementById("range_" + (data.val[0] + 1)).value = data.val[1];
 				}
@@ -288,6 +324,18 @@
 				document.getElementById("output").style.display = "none";
 			}
 			
+		}
+		
+		function update_cooling_threshold(n) {
+			n = parseInt(document.getElementById("temperature_threshold").value) + parseInt(n);
+			if (n < 40) {
+				n = 40;
+			} else if (n > 80) {
+				n = 80;
+			}
+			
+			doSend({key: 7, val: n});
+			document.getElementById("temperature_threshold").value = n;
 		}
 
 	</script>

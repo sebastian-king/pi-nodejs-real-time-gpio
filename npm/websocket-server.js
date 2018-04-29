@@ -75,7 +75,8 @@ wsServer.on('request', function(request) {
 			Math.round(led_strips[3].getPwmDutyCycle() / 255 * 100),
 			Math.round(led_strips[4].getPwmDutyCycle() / 255 * 100),
 			Math.round(led_strips[5].getPwmDutyCycle() / 255 * 100),
-			speakers.digitalRead()
+			speakers.digitalRead(),
+			parseInt(fs.readFileSync('/var/www/h/assets/cooling/temperature_threshold', 'utf8'))
 		]
 	}));
 
@@ -105,6 +106,10 @@ wsServer.on('request', function(request) {
 						}
 					} else if (received.key == 6) {
 						speakers.digitalWrite(received.val);
+					} else if (received.key == 7) {
+						if (received.val >= 40 && received.val <= 80) {
+							fs.writeFile('/var/www/h/assets/cooling/temperature_threshold', received.val);
+						}
 					}
 				}
 			}
