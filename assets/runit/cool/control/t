@@ -1,0 +1,30 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+descendents ()
+{
+  local children=$(ps -o pid= --ppid "$1")
+
+  for pid in $children
+  do
+    descendents "$pid"
+  done
+
+  echo "$children"
+}
+
+pid=`cat "${DIR}/../supervise/pid"`
+
+#descendents_list=$(descendents "${pid}");
+
+echo
+echo "Service stopping... (`whoami`)"
+
+for descendent_pid in $(descendents "${pid}"); do
+	kill "${descendent_pid}"
+	echo "Killed child: $descendent_pid";
+done;
+
+kill "${pid}";
+echo "Killed parent: $pid";
