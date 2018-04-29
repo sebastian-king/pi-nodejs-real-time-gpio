@@ -23,7 +23,8 @@ ln -s "/root/.acme.sh/${domain}/fullchain.cer" "assets/ssl/fullchain.cer"
 ln -s "/root/.acme.sh/${domain}/${domain}.key" "assets/ssl/privkey.key"
 
 #install programs
-apt-get install apache2 php pigpio nodejs nodejs-legacy npm runit
+apt-get install apache2 php pigpio nodejs nodejs-legacy npm runit python-pip
+pip install adafruit-mcp3008
 
 #make sure we install npm modules into the correct directory
 cd /var/www/h/npm/

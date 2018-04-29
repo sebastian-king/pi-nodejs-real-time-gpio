@@ -16,11 +16,11 @@ var clients = [];
 var connectionIDCounter = 0;
 
 led_strips.push(new Gpio(26, {mode: Gpio.OUTPUT})); //top_led_strip
-//led_strips.push(new Gpio(6, {mode: Gpio.OUTPUT})); //top_led_strip
 led_strips.push(new Gpio(20, {mode: Gpio.OUTPUT})); //keyboard_led_strip
 led_strips.push(new Gpio(16, {mode: Gpio.OUTPUT})); //shelves_led_strip
 led_strips.push(new Gpio(24, {mode: Gpio.OUTPUT})); //hifi_left_led_strip
 led_strips.push(new Gpio(25, {mode: Gpio.OUTPUT})); //hifi_right_led_strip
+led_strips.push(new Gpio(12, {mode: Gpio.OUTPUT})); //soft_top_led_strip
 
 speakers = new Gpio(22, {mode: Gpio.OUTPUT});
 
@@ -74,6 +74,7 @@ wsServer.on('request', function(request) {
 			Math.round(led_strips[2].getPwmDutyCycle() / 255 * 100),
 			Math.round(led_strips[3].getPwmDutyCycle() / 255 * 100),
 			Math.round(led_strips[4].getPwmDutyCycle() / 255 * 100),
+			Math.round(led_strips[5].getPwmDutyCycle() / 255 * 100),
 			speakers.digitalRead()
 		]
 	}));

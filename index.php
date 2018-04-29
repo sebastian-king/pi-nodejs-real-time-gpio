@@ -23,7 +23,7 @@
 			display: inline-block;
 			writing-mode: bt-lr;
 			-webkit-appearance: slider-vertical;
-			width: 20%;
+			width: 16.666666666%;
 			height: 500px;
 			background: #d3d3d3;
 			outline: none;
@@ -72,7 +72,7 @@
 		
 		label {
 			display: inline-block;
-			width: 20%;
+			width: 16.666666666%;
 			text-align: center;
 			margin-bottom: 10px;
 		}
@@ -156,16 +156,18 @@
 	
 	<div>
 	<label for="range_1">Top</label><!--
-	--><label for="range_1">Keyboard</label><!--
-	--><label for="range_1">Shelves</label><!--
-	--><label for="range_1">HiFi Left</label><!--
-	--><label for="range_1">HiFi Right</label>
+	--><label for="range_2">Keyboard</label><!--
+	--><label for="range_3">Shelves</label><!--
+	--><label for="range_4">HiFi Left</label><!--
+	--><label for="range_5">HiFi Right</label><!--
+	--><label for="range_6">Soft</label>
 	
 	<input type="range" min="0" max="100" value="0" class="slider" id="range_1"><!--
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_2"><!--
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_3"><!--
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_4"><!--
-	--><input type="range" min="0" max="100" value="0" class="slider" id="range_5">
+	--><input type="range" min="0" max="100" value="0" class="slider" id="range_5"><!--
+	--><input type="range" min="0" max="100" value="0" class="slider" id="range_6">
 	</div>
 		
 <h2>WebSocket Output</h2>
@@ -215,6 +217,7 @@
 					document.getElementById("range_3").value = data.val[2];
 					document.getElementById("range_4").value = data.val[3];
 					document.getElementById("range_5").value = data.val[4];
+					document.getElementById("range_6").value = data.val[5];
 					document.getElementById("toggle-speakers-switch").checked = data.val[5] == 1 ? true : false;
 				} else if (data.key == 'changed') {
 					document.getElementById("range_" + (data.val[0] + 1)).value = data.val[1];
@@ -245,6 +248,7 @@
 		var range_3 = document.getElementById("range_3");
 		var range_4 = document.getElementById("range_4");
 		var range_5 = document.getElementById("range_5");
+		var range_6 = document.getElementById("range_6");
 		
 		range_1.oninput = function() {
 			doSend({key: 0, val: parseInt(this.value)});
@@ -260,6 +264,9 @@
 		}
 		range_5.oninput = function() {
 			doSend({key: 4, val: parseInt(this.value)});
+		}
+		range_6.oninput = function() {
+			doSend({key: 5, val: parseInt(this.value)});
 		}
 		
 		var speakers_6 = document.getElementById("toggle-speakers-switch").onclick = function() {
