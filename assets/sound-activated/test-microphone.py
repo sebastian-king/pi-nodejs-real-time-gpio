@@ -27,6 +27,6 @@ while True:
 	for i in range(n):
 		sys.stdout.write('#')
 		sys.stdout.flush()
-	pi.set_PWM_dutycycle(16, n)
+	pi.set_PWM_dutycycle(12, n)
 	print n
-	time.sleep(0.05)
+	time.sleep(0.01)
