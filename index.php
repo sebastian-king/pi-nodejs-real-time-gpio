@@ -20,11 +20,17 @@
 			width: 100%;
 		}
 
+		.row1 .slider, .row1 label {
+			width: 16.666666666%;
+		}
+		.row2 .slider, .row2 label {
+			width: 25%;
+		}
+		
 		.slider {
 			display: inline-block;
 			writing-mode: bt-lr;
 			-webkit-appearance: slider-vertical;
-			width: 16.666666666%;
 			height: 500px;
 			background: #d3d3d3;
 			outline: none;
@@ -184,7 +190,7 @@
 		</div>
 	</div>
 	
-	<div>
+	<div class="row1">
 	<label for="range_1">Top</label><!--
 	--><label for="range_2">Keyboard</label><!--
 	--><label for="range_3">Shelves</label><!--
@@ -198,6 +204,18 @@
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_4"><!--
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_5"><!--
 	--><input type="range" min="0" max="100" value="0" class="slider" id="range_6">
+	</div>
+	
+	<div class="row2">
+	<label for="range_1">W</label><!--
+	--><label for="range_2">R</label><!--
+	--><label for="range_3">G</label><!--
+	--><label for="range_4">B</label>
+	
+	<input type="range" min="0" max="100" value="0" class="slider" id="range_7"><!--
+	--><input type="range" min="0" max="100" value="0" class="slider" id="range_8"><!--
+	--><input type="range" min="0" max="100" value="0" class="slider" id="range_9"><!--
+	--><input type="range" min="0" max="100" value="0" class="slider" id="range_10">
 	</div>
 	
 	<div style="text-align: center; margin-bottom: 10px;">Temperature threshold (°C)</div>
@@ -253,13 +271,23 @@
 					document.getElementById("range_4").value = data.val[3];
 					document.getElementById("range_5").value = data.val[4];
 					document.getElementById("range_6").value = data.val[5];
-					document.getElementById("toggle-speakers-switch").checked = data.val[6] == 1 ? true : false;
-					document.getElementById("temperature_threshold").value = data.val[7];
+					document.getElementById("range_7").value = data.val[6];
+					document.getElementById("range_8").value = data.val[7];
+					document.getElementById("range_9").value = data.val[8];
+					document.getElementById("range_10").value = data.val[9];
+					document.getElementById("toggle-speakers-switch").checked = data.val[10] == 1 ? true : false;
+					document.getElementById("temperature_threshold").value = data.val[11];
 				} else if (data.key == 'changed') {
-					document.getElementById("range_" + (data.val[0] + 1)).value = data.val[1];
+					if (data.val[0] >= 0 && data.val[0] <= 9) {
+						document.getElementById("range_" + (data.val[0] + 1)).value = data.val[1];
+					} else if (data.val[0] == 10) {
+						document.getElementById("toggle-speakers-switch").checked = data.val[1] == 1 ? true : false;
+					} else if (data.val[0] == 11) {
+						document.getElementById("temperature_threshold").value = data.val[1];
+					}
 				}
 			}
-			writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
+			writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data + '</span>');
 			//websocket.close();
 		}
 		function onError(evt) {
@@ -285,6 +313,10 @@
 		var range_4 = document.getElementById("range_4");
 		var range_5 = document.getElementById("range_5");
 		var range_6 = document.getElementById("range_6");
+		var range_7 = document.getElementById("range_7");
+		var range_8 = document.getElementById("range_8");
+		var range_9 = document.getElementById("range_9");
+		var range_10 = document.getElementById("range_10");
 		
 		range_1.oninput = function() {
 			doSend({key: 0, val: parseInt(this.value)});
@@ -304,14 +336,26 @@
 		range_6.oninput = function() {
 			doSend({key: 5, val: parseInt(this.value)});
 		}
+		range_7.oninput = function() {
+			doSend({key: 6, val: parseInt(this.value)});
+		}
+		range_8.oninput = function() {
+			doSend({key: 7, val: parseInt(this.value)});
+		}
+		range_9.oninput = function() {
+			doSend({key: 8, val: parseInt(this.value)});
+		}
+		range_10.oninput = function() {
+			doSend({key: 9, val: parseInt(this.value)});
+		}
 		
-		var speakers_6 = document.getElementById("toggle-speakers-switch").onclick = function() {
+		var speakers_10 = document.getElementById("toggle-speakers-switch").onclick = function() {
 			if (this.checked) {
 				console.log('Switching speakers on');
-				doSend({key: 6, val: 1});
+				doSend({key: 10, val: 1});
 			} else {
 				console.log('Switching speakers off');
-				doSend({key: 6, val: 0});
+				doSend({key: 10, val: 0});
 			}
 		}
 		
@@ -334,7 +378,7 @@
 				n = 80;
 			}
 			
-			doSend({key: 7, val: n});
+			doSend({key: 11, val: n});
 			document.getElementById("temperature_threshold").value = n;
 		}
 

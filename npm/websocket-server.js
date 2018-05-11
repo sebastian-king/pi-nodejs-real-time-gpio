@@ -15,13 +15,17 @@ var led_strips = [];
 var clients = [];
 var connectionIDCounter = 0;
 
-led_strips.push(new Gpio(26, {mode: Gpio.OUTPUT})); //top_led_strip
-led_strips.push(new Gpio(20, {mode: Gpio.OUTPUT})); //keyboard_led_strip
-led_strips.push(new Gpio(16, {mode: Gpio.OUTPUT})); //shelves_led_strip
-led_strips.push(new Gpio(24, {mode: Gpio.OUTPUT})); //hifi_left_led_strip
-led_strips.push(new Gpio(25, {mode: Gpio.OUTPUT})); //hifi_right_led_strip
+led_strips.push(new Gpio(6, {mode: Gpio.OUTPUT})); //top_led_strip
+led_strips.push(new Gpio(21, {mode: Gpio.OUTPUT})); //keyboard_led_strip
+led_strips.push(new Gpio(20, {mode: Gpio.OUTPUT})); //shelves_led_strip
+led_strips.push(new Gpio(19, {mode: Gpio.OUTPUT})); //hifi_left_led_strip
+led_strips.push(new Gpio(26, {mode: Gpio.OUTPUT})); //hifi_right_led_strip
 led_strips.push(new Gpio(12, {mode: Gpio.OUTPUT})); //soft_top_led_strip
 
+led_strips.push(new Gpio(9, {mode: Gpio.OUTPUT})); //w
+led_strips.push(new Gpio(13, {mode: Gpio.OUTPUT})); //r
+led_strips.push(new Gpio(11, {mode: Gpio.OUTPUT})); //g
+led_strips.push(new Gpio(5, {mode: Gpio.OUTPUT})); //b
 speakers = new Gpio(22, {mode: Gpio.OUTPUT});
 
 for (i = 0; i < led_strips.length; i++) {
@@ -75,6 +79,10 @@ wsServer.on('request', function(request) {
 			Math.round(led_strips[3].getPwmDutyCycle() / 255 * 100),
 			Math.round(led_strips[4].getPwmDutyCycle() / 255 * 100),
 			Math.round(led_strips[5].getPwmDutyCycle() / 255 * 100),
+			Math.round(led_strips[6].getPwmDutyCycle() / 255 * 100),
+			Math.round(led_strips[7].getPwmDutyCycle() / 255 * 100),
+			Math.round(led_strips[8].getPwmDutyCycle() / 255 * 100),
+			Math.round(led_strips[9].getPwmDutyCycle() / 255 * 100),
 			speakers.digitalRead(),
 			parseInt(fs.readFileSync('/var/www/h/assets/cooling/temperature_threshold', 'utf8'))
 		]
@@ -92,25 +100,28 @@ wsServer.on('request', function(request) {
 
 			if (typeof received == 'object') {
 				if (typeof received.key == 'number') {
-					if (received.key >= 0 && received.key <= 5) {
+					if (received.key >= 0 && received.key <= 9) {
 						if (typeof received.val == 'number') {
 							if (received.val >= 0 & received.val <= 100) {
 								var val = Math.round(255 * received.val / 100);
 								led_strips[received.key].pwmWrite(val);
-								clients.forEach(function(client) {
-									if (client != connection) {
-										client.send(JSON.stringify({key: 'changed', val: [received.key, received.val]}));
-									}
-								});
+								
 							}
 						}
-					} else if (received.key == 6) {
+					} else if (received.key == 10) {
 						speakers.digitalWrite(received.val);
-					} else if (received.key == 7) {
+					} else if (received.key == 11) {
 						if (received.val >= 40 && received.val <= 80) {
 							fs.writeFile('/var/www/h/assets/cooling/temperature_threshold', received.val);
+						} else {
+							return;
 						}
 					}
+					clients.forEach(function(client) {
+						if (client != connection) {
+							client.send(JSON.stringify({key: 'changed', val: [received.key, received.val]}));
+						}
+					});
 				}
 			}
 
@@ -124,7 +135,7 @@ wsServer.on('request', function(request) {
 	});
 
 	connection.on('close', function(reasonCode, description) {
-		clients = clients.splice(clients.indexOf(connection), 1);
+		clients.splice(clients.indexOf(connection), 1);
         	console.log((new Date()) + ' Peer ' + connection.remoteAddress + ' disconnected.');
 	});
 });
