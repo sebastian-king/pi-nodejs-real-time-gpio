@@ -18,7 +18,7 @@ pi=pigpio.pi()
 while True:
 	val = mcp.read_adc(7)
 
-	n = (val - 450)/2;
+	n = (val - 500)/2;
 	if n < 0:
 		n = 0
 	if n > 255:

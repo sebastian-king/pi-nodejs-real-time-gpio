@@ -57,6 +57,14 @@ function originIsAllowed(origin) {
   return true;
 }
 
+function updateClients(key, val, connection) {
+	clients.forEach(function(client) {
+		if (client != connection) {
+			client.send(JSON.stringify({key: 'changed', val: [key, val]}));
+		}
+	});
+}
+
 wsServer.on('request', function(request) {
 	if (!originIsAllowed(request.origin)) {
 		request.reject();
@@ -105,7 +113,6 @@ wsServer.on('request', function(request) {
 							if (received.val >= 0 & received.val <= 100) {
 								var val = Math.round(255 * received.val / 100);
 								led_strips[received.key].pwmWrite(val);
-								
 							}
 						}
 					} else if (received.key == 10) {
@@ -117,11 +124,22 @@ wsServer.on('request', function(request) {
 							return;
 						}
 					}
-					clients.forEach(function(client) {
-						if (client != connection) {
-							client.send(JSON.stringify({key: 'changed', val: [received.key, received.val]}));
+					//clients.forEach(function(client) {
+					//	if (client != connection) {
+					//		client.send(JSON.stringify({key: 'changed', val: [received.key, received.val]}));
+					//	}
+					//});
+					updateClients(received.key, received.val, connection);
+				} else if (typeof received.key == 'object') {
+					if (typeof received.val == 'number') {
+						for (i in received.key) {
+							if (i >= 0 && i <= 9) {
+								console.log("setting ", i, " to ", received.val);
+								led_strips[i].pwmWrite(received.val);
+							}
 						}
-					});
+						updateClients(received.key, received.val, connection);
+					}
 				}
 			}
 

@@ -34,7 +34,8 @@ npm install pigpio websocket
 
 #add crontab for runit
 echo "@reboot	runsvdir /etc/service/" > /tmp/cron
-echo "0 0 15 * *	acme.sh --issue --dns dns_namecom -d '${domain}'" >> /tmp/cron
+echo "0 0 15 * *	/root/.acme.sh/acme.sh --issue --dns dns_namecom -d '${domain}' && service apache2 restart && sv t /etc/service/wss" >> /tmp/cron
+
 crontab /tmp/cron
 rm /tmp/cron
 crontab -l # just to check and make sure they got added
